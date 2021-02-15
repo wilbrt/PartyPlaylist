@@ -82,7 +82,7 @@
       [:a {:href "videot"} [:p "videolista"]]))
 
 (defn postinfo [req]
-  (html [:form {:action "urls" :method "post"}
+  (html [:form {:action "./" :method "post"}
          [:input {:type "text" :id "url" :name "url"}]
          [:input {:type "submit" :id "url" :name "url"}]]))
 
@@ -123,7 +123,7 @@
                   [:div {:align "center"}
                    [:p (get-name-by-id 1)]]
                   [:div {:align "center"}
-                        [:form {:id "addtolist" :action "./urls" :method "post"}
+                        [:form {:id "addtolist" :action "./" :method "post"}
                         [:input {:type "text" :id "url" :name "url"}]
                         [:input {:type "submit" :id "url" :name "url"}]]
                   [:button {:type "submit" :value "Next" :onclick "window.location=\"./seuraava\";"} "Next"]]
@@ -143,7 +143,7 @@
                               });
                           });"]]
                   [:p "Playlist empty"]
-                  [:form {:action "./urls" :method "post" :id "lomake"}
+                  [:form {:action "./" :method "post" :id "lomake"}
                     [:input {:type "text" :id "url" :name "url"}]
                     [:input {:type "submit" :id "url" :name "url"}]]))))
 
