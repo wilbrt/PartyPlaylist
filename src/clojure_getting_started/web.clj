@@ -8,7 +8,7 @@
             [clojure.java.jdbc :as jdbc]
             [clj-http.client :as client]
             [ring.util.request :as rur]
-            [urls.clj :as urls])
+            [clojure_getting_started.urls :as urls])
         (:use [hiccup.core]))
 
 
