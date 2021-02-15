@@ -5,6 +5,7 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.10.0"]
                  [compojure "1.6.1"]
+                 [lein-ring "0.8.8"]
                  [ring/ring-jetty-adapter "1.7.1"]
                  [environ "1.1.0"]
                  [org.clojure/java.jdbc "0.7.10"]

@@ -1,5 +1,5 @@
 (ns clojure-getting-started.web
-  (:require [compojure.core :refer [defroutes GET PUT POST DELETE ANY]]
+  (:require [compojure.core :refer :all]
             [compojure.handler :refer [site]]
             [compojure.route :as route]
             [clojure.java.io :as io]
@@ -19,7 +19,7 @@
   (GET "/postinfo" [] urls/postinfo)
   (GET "/videot" [] urls/videohaku)
   (GET "/soittolista" [] urls/soittolista)
-  (POST "/urls" [] urls/create-url-handler)
+  (POST "/asd" [] urls/create-url-handler)
   (ANY "*" []
        (route/not-found (slurp (io/resource "404.html")))))
 

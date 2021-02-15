@@ -61,13 +61,11 @@
 
 (defn create-url-handler
   [req]
- (let [request (rur/body-string req)
-       arr (.split request "=")]
-   (cond
-       (= (first arr) "url")  (let [url (videoid (str (first (.split (second arr) "&"))))
+  (let [arr (str (first (get-in req [:params :url])))]
+       (let [url (videoid arr)
               name (videoname url)
               row (create-url! url name)]
-              {:status 200 :body row}))))
+              {:status 200 :body row})))
 
 (defn frontpage1
   [req]
@@ -76,7 +74,7 @@
       [:a {:href "videot"} [:p "videolista"]]))
 
 (defn postinfo [req]
-  (html [:form {:action "urls" :method "post"}
+  (html [:form {:action "./asd" :method "post"}
          [:input {:type "text" :id "url" :name "url"}]
          [:input {:type "submit" :id "url" :name "url"}]]))
 
@@ -117,7 +115,7 @@
                   [:div {:align "center"}
                    [:p (get-name-by-id 1)]]
                   [:div {:align "center"}
-                        [:form {:id "addtolist" :action "./urls" :method "post"}
+                        [:form {:id "addtolist" :action "./asd" :method "post"}
                         [:input {:type "text" :id "url" :name "url"}]
                         [:input {:type "submit" :id "url" :name "url"}]]
                   [:button {:type "submit" :value "Next" :onclick "window.location=\"./seuraava\";"} "Next"]]
@@ -137,7 +135,7 @@
                               });
                           });"]]
                   [:p "Playlist empty"]
-                  [:form {:action "./urls" :method "post" :id "lomake"}
+                  [:form {:action "./asd" :method "post" :id "lomake"}
                     [:input {:type "text" :id "url" :name "url"}]
                     [:input {:type "submit" :id "url" :name "url"}]]))))
 
@@ -147,13 +145,8 @@
   (html [:script "window.location=\"./videot\";"])))
 
 (defn soittolista [req]
-  (html [:h
-         [:script
-          {:src "https://code.jquery.com/jquery-3.5.1.min.js" :integrity "sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" :crossorigin "anonymous"}]
-         [:script
-          {:src "https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js" :integrity "sha384-qlmct0AOBiA2VPZkMY3+2WqkHtIQ9lSdAsAn5RUJD/3vA5MKDgSGcdmIv4ycVxyn" :crossorigin "anonymous"}]]
-        [:table (for [x (range 2 (newsongnumber 1))]
+  (html [:table (for [x (range 2 (newsongnumber 1))]
                   [:div {:align "center"}
                    [:tr
-                   [:td (get-name-by-id  x)]]]
+                   [:td (get-name-by-id  x)] "asdasdasd"]]
                   )]))
