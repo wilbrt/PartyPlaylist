@@ -13,10 +13,8 @@
 
 
 (defroutes app
-  (GET "/" [] urls/frontpage1)
+  (GET "/" [] urls/videohaku)
   (GET "/seuraava" [] urls/seuraava)
-  (GET "/getinfo" [] urls/getinfo)
-  (GET "/postinfo" [] urls/postinfo)
   (GET "/videot" [] urls/videohaku)
   (GET "/soittolista" [] urls/soittolista)
   (POST "/asd" [] urls/create-url-handler)

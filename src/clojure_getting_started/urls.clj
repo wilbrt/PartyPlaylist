@@ -69,14 +69,7 @@
 
 (defn frontpage1
   [req]
-(html [:a {:href "getinfo"} [:p "Hae id"]]
-      [:a {:href "postinfo"} [:p "Lisää id"]]
-      [:a {:href "videot"} [:p "videolista"]]))
-
-(defn postinfo [req]
-  (html [:form {:action "./asd" :method "post"}
-         [:input {:type "text" :id "url" :name "url"}]
-         [:input {:type "submit" :id "url" :name "url"}]]))
+(html [:a {:href "videot"} [:p "videolista"]]))
 
 
 (defn getinfo [req]
@@ -102,7 +95,7 @@
                     {:src "https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js" :integrity "sha384-qlmct0AOBiA2VPZkMY3+2WqkHtIQ9lSdAsAn5RUJD/3vA5MKDgSGcdmIv4ycVxyn" :crossorigin "anonymous"}]
                    [:script "$(function() {
                         $('#addtolist').ajaxForm(function() {
-                                  document.getElementById('lista').contentWindow.location.reload();
+                                  document.getElementById('lista').src = document.getElementById('lista').src;
                               });
                           });"]]
                   [:div {:align "center"}
@@ -118,7 +111,8 @@
                         [:form {:id "addtolist" :action "./asd" :method "post"}
                         [:input {:type "text" :id "url" :name "url"}]
                         [:input {:type "submit" :id "url" :name "url"}]]
-                  [:button {:type "submit" :value "Next" :onclick "window.location=\"./seuraava\";"} "Next"]]
+                  [:button {:type "submit" :value "Next" :onclick "window.location=\"./seuraava\";"} "Next"]
+                   [:button {:type "submit" :value "ref" :onclick "document.getElementById('lista').src = document.getElementById('lista').src"} "Refresh Playlist"]]
                   [:div {:align "center"}
                   [:iframe {:id "lista"
                             :width "450"
@@ -148,5 +142,5 @@
   (html [:table (for [x (range 2 (newsongnumber 1))]
                   [:div {:align "center"}
                    [:tr
-                   [:td (get-name-by-id  x)] "asdasdasd"]]
+                   [:td (get-name-by-id  x)]]]
                   )]))
