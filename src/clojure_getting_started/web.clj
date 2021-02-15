@@ -171,7 +171,7 @@
   (GET "/postinfo" [] postinfo)
   (GET "/videot" [] videohaku)
   (GET "/soittolista" [] soittolista)
-  (POST "/urls" [] create-url-handler)
+  (POST "/" [] create-url-handler)
   (ANY "*" []
        (route/not-found (slurp (io/resource "404.html")))))
 
