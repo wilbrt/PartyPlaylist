@@ -16,6 +16,8 @@
               t (str (nth (.split (second (.split teksti "videoId")) "\"") 2))]
   (subs t 0 (- (.length t) 1))))
 
+
+
 (defn videoname [query]
   (let [teksti (str (client/get (str "https://www.youtube.com/watch?v=" query)))
         t (second (.split teksti "title>"))]
@@ -71,7 +73,6 @@
   [req]
 (html [:a {:href "videot"} [:p "videolista"]]))
 
-
 (defn getinfo [req]
   (let [query (get req :query-string)]
     (if-not query
@@ -99,7 +100,7 @@
                               });
                           });"]]
                   [:div {:align "center"}
-                  [:iframe {
+                   [:iframe {
                         :width "560"
                         :height "300"
                         :src (str "https://www.youtube.com/embed/" id "?autoplay=1")
@@ -108,11 +109,11 @@
                   [:div {:align "center"}
                    [:p (get-name-by-id 1)]]
                   [:div {:align "center"}
-                        [:form {:id "addtolist" :action "./asd" :method "post"}
+                        [:form {:id "addtolist" :action "./asd" :onclick "setTimeout(() => {document.getElementById('lista').src = document.getElementById('lista').src;}, 2000);" :method "post"}
                         [:input {:type "text" :id "url" :name "url"}]
                         [:input {:type "submit" :id "url" :name "url"}]]
                   [:button {:type "submit" :value "Next" :onclick "window.location=\"./seuraava\";"} "Next"]
-                   [:button {:type "submit" :value "ref" :onclick "document.getElementById('lista').src = document.getElementById('lista').src"} "Refresh Playlist"]]
+                  #_[:button {:type "submit" :value "ref" :onclick "document.getElementById('lista').src = document.getElementById('lista').src"} "Refresh Playlist"]]
                   [:div {:align "center"}
                   [:iframe {:id "lista"
                             :width "450"
@@ -132,6 +133,13 @@
                   [:form {:action "./asd" :method "post" :id "lomake"}
                     [:input {:type "text" :id "url" :name "url"}]
                     [:input {:type "submit" :id "url" :name "url"}]]))))
+
+(defn frontpage [req]
+  (html [:div {:align "center"}
+         [:form {:action "./videohaku"}
+         [:input {:type "text" :id "nimi" :name "nimi"}]
+         [:input {:type "submit" :value "hae"} ]
+         [:input {:type "submit" :value "luo" :formaction "./luohuone" :method "post"} ]]] ))
 
 (defn seuraava [req]
  (do
