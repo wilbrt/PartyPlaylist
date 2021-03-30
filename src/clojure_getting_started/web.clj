@@ -13,10 +13,11 @@
 
 
 (defroutes app
-  (GET "/" [] urls/videohaku)
+  (GET "/" [] urls/frontpage)
   (GET "/seuraava" [] urls/seuraava)
   (GET "/videot" [] urls/videohaku)
   (GET "/soittolista" [] urls/soittolista)
+  (POST "/luohuone" [] urls/luohuone)
   (POST "/asd" [] urls/create-url-handler)
   (ANY "*" []
        (route/not-found (slurp (io/resource "404.html")))))

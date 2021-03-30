@@ -8,14 +8,31 @@
 (def spec (or (System/getenv "DATABASE_URL")
             "postgresql://localhost:5432/pplaylist"))
 
+(defn luohuone [req]
+  (as-> req r
+      (get-in r [:params :nimi])
+      (first r)
+      (str r)
+      (jdbc/create-table-ddl r [[:id :int] [:url "varchar(32)"] [:name "varchar(32)"]]
+                                  {:entities clojure.string/upper-case :conditional? true})
+      #_(vec (str r))
+      (jdbc/db-do-commands spec r)
+      ))
+
 (defn not-found [req]
   (html [:p "page not found"]))
 
 (defn videoid [query]
-        (let [teksti (str (client/get "https://www.youtube.com/results" {:query-params {"search_query" (str query)}}))
-              t (str (nth (.split (second (.split teksti "videoId")) "\"") 2))]
-  (subs t 0 (- (.length t) 1))))
-
+  (as-> query t
+        (str t)
+        (client/get "https://www.youtube.com/results" {:query-params {"search_query" t}})
+        (str t)
+        (.split t "videoId")
+        (second t )
+        (.split t "\"")
+        (nth t 2)
+        (str t)
+        (subs t 0 (- (.length t) 1))))
 
 
 (defn videoname [query]
@@ -23,7 +40,7 @@
         t (second (.split teksti "title>"))]
     (clojure.string/join "-" (reverse  (rest  (reverse (.split (subs t 0 (- (.length t) 2)) "-")))))))
 
-(defn get-url-by-id
+(defn get-url-by-id1
   "Gets the url from the database with the given id, or nil if no such
    url exists."
   [id]
@@ -31,7 +48,15 @@
         result (jdbc/query spec query)]
         (:url (first result))))
 
-(defn get-name-by-id
+(defn get-url-by-id
+  [id table]
+  (let [q [(str "SELECT url FROM " table " WHERE id = ?") id]]
+      (->> q
+          (jdbc/query spec)
+          (first)
+          (:url))))
+
+(defn get-name-by-id1
   "Gets the url from the database with the given id, or nil if no such
    url exists."
   [id]
@@ -39,55 +64,43 @@
         result (jdbc/query spec query)]
         (:name (first result))))
 
-(defn newsongnumber [n]
-  (if-not (get-url-by-id n)
+(defn get-name-by-id
+  [id table]
+  (let [q [(str "SELECT name FROM " table " WHERE id = ?") id]]
+      (->> q
+          (jdbc/query spec)
+          (first)
+          (:name))))
+
+
+(defn newsongnumber [n table]
+  (if-not (get-url-by-id n table)
     n
-    (newsongnumber (+ 1 n))))
+    (newsongnumber (+ 1 n) table)))
 
 (defn create-url!
   "Given a url as a string, creates a url row in the database and returns
    the created row."
-  [url name]
-  (let [id (newsongnumber 1)
+  [url name table]
+  (let [id (newsongnumber 1 table)
         row {:name name :url url :id id}
-        result (jdbc/insert! spec :urls row)]
+        result (jdbc/insert! spec (keyword table) row)]
     (first result)))
 
-(defn get-url-handler
-  [req]
-  (let [id (get-in req [:params :id])
-        url (get-url-by-id (Integer/parseInt id))]
-    (if-not url
-      (throw (not-found))
-      {:status 200 :body url})))
 
-(defn create-url-handler
-  [req]
-  (let [arr (str (first (get-in req [:params :url])))]
-       (let [url (videoid arr)
-              name (videoname url)
-              row (create-url! url name)]
-              {:status 200 :body row})))
+(defn create-url-handler [req]
+  (let [r (str (first (get-in req [:params :url])))
+        table (get-in req [:params :huone])]
+        (as-> (videoid r) q
+              (create-url! q (videoname q) table))))
 
-(defn frontpage1
-  [req]
-(html [:a {:href "videot"} [:p "videolista"]]))
-
-(defn getinfo [req]
-  (let [query (get req :query-string)]
-    (if-not query
-      (html [:form
-           [:input {:type "text" :id "lookup" :name "lookup"}]
-           [:input {:type "submit"}]])
-      {:status 200 :body (get-url-by-id (Integer/parseInt (str (last (.split query "=")))))})))
-
-
-(defn update-table! []
-      (jdbc/delete! spec :urls ["id = ?" 1])
-      (jdbc/execute! spec ["update urls set id = id - 1 where id < ?" 30]))
+(defn update-table! [table]
+      (jdbc/delete! spec (keyword table) ["id = ?" 1])
+      (jdbc/execute! spec [(str "update " table " set id = id - 1 where id < ?") 30]))
 
 (defn videohaku [req]
-    (let [id (get-url-by-id 1)]
+    (let [table (get-in req [:params :huone])
+          id (get-url-by-id 1 table)]
         (if id
             (html [:h
                    [:script
@@ -107,18 +120,19 @@
                         :frameboarder "0"
                         :allow "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"}]]
                   [:div {:align "center"}
-                   [:p (get-name-by-id 1)]]
+                   [:p (get-name-by-id 1 table)]]
                   [:div {:align "center"}
                         [:form {:id "addtolist" :action "./asd" :onclick "setTimeout(() => {document.getElementById('lista').src = document.getElementById('lista').src;}, 2000);" :method "post"}
                         [:input {:type "text" :id "url" :name "url"}]
+                        [:input {:type "hidden" :id "huone" :name "huone" :value table}]
                         [:input {:type "submit" :id "url" :name "url"}]]
-                  [:button {:type "submit" :value "Next" :onclick "window.location=\"./seuraava\";"} "Next"]
+                  [:button {:type "submit" :value "Next" :onclick (str "window.location=\"./seuraava?huone=" table "\";")} "Next"]
                   #_[:button {:type "submit" :value "ref" :onclick "document.getElementById('lista').src = document.getElementById('lista').src"} "Refresh Playlist"]]
                   [:div {:align "center"}
                   [:iframe {:id "lista"
                             :width "450"
                             :height "315"
-                            :src "./soittolista"}]])
+                            :src (str "./soittolista?huone=" table)}]])
             (html [:h
                    [:script
                     {:src "https://code.jquery.com/jquery-3.5.1.min.js" :integrity "sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" :crossorigin "anonymous"}]
@@ -132,23 +146,29 @@
                   [:p "Playlist empty"]
                   [:form {:action "./asd" :method "post" :id "lomake"}
                     [:input {:type "text" :id "url" :name "url"}]
+                    [:input {:type "hidden" :id "huone" :name "huone" :value table}]
                     [:input {:type "submit" :id "url" :name "url"}]]))))
 
 (defn frontpage [req]
   (html [:div {:align "center"}
-         [:form {:action "./videohaku"}
-         [:input {:type "text" :id "nimi" :name "nimi"}]
-         [:input {:type "submit" :value "hae"} ]
-         [:input {:type "submit" :value "luo" :formaction "./luohuone" :method "post"} ]]] ))
+          [:p "Creat a new room or Join an existing one to have a party with a playlist!"]
+          [:form {:id "nimi" :action "./luohuone"  :method "post"}
+            [:input {:type "text" :id "nimi" :name "nimi"}]
+            [:input {:type "submit" :id "nimi" :name "nimi" :value "Create"}]]
+          [:form {:id "huone" :action "./videot" :method "get"}
+           [:input {:type "text" :id "huone" :name "huone"}]
+           [:input {:type "submit" :id "huone" :value "Join"}]]]))
 
 (defn seuraava [req]
- (do
-  (update-table!)
-  (html [:script "window.location=\"./videot\";"])))
+  (let [table (get-in req [:params :huone])]
+    (do
+      (update-table! table)
+      (html [:script (str "window.location=\"./videot?huone=" table "\";" )]))))
 
 (defn soittolista [req]
-  (html [:table (for [x (range 2 (newsongnumber 1))]
-                  [:div {:align "center"}
-                   [:tr
-                   [:td (get-name-by-id  x)]]]
-                  )]))
+  (let [table (get-in req [:params :huone])]
+      (html [:table (for [x (range 2 (newsongnumber 1 table))]
+                      [:div {:align "center"}
+                        [:tr
+                        [:td (get-name-by-id x table)]]]
+                  )])))
