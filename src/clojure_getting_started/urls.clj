@@ -17,7 +17,9 @@
                                   {:entities clojure.string/upper-case :conditional? true})
       #_(vec (str r))
       (jdbc/db-do-commands spec r)
-      ))
+      )
+  (html [:meta {:http-equiv "refresh" :content (str "0; URL=./videot?huone=" (str (first (get-in req [:params :nimi]))))}]
+        [:p "Your room is being prepared."]))
 
 (defn not-found [req]
   (html [:p "page not found"]))
@@ -151,13 +153,10 @@
 
 (defn frontpage [req]
   (html [:div {:align "center"}
-          [:p "Creat a new room or Join an existing one to have a party with a playlist!"]
+          [:p "Type in a name to Create a new room or Join an existing one and pimp your party with a playlist!"]
           [:form {:id "nimi" :action "./luohuone"  :method "post"}
             [:input {:type "text" :id "nimi" :name "nimi"}]
-            [:input {:type "submit" :id "nimi" :name "nimi" :value "Create"}]]
-          [:form {:id "huone" :action "./videot" :method "get"}
-           [:input {:type "text" :id "huone" :name "huone"}]
-           [:input {:type "submit" :id "huone" :value "Join"}]]]))
+            [:input {:type "submit" :id "nimi" :name "nimi" :value "Create/Join"}]]]))
 
 (defn seuraava [req]
   (let [table (get-in req [:params :huone])]
