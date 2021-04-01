@@ -42,9 +42,14 @@
 
 (defn muuta [m c]
     (as-> m a
-        (.split a "name")
-        (cond (= c 0) (last a)
-              (= c 1) (second a))
+         (cond (= c 0)(-> a
+                        (.split "name")
+                        (last))
+              (= c 1) (-> a
+                        (.split "artists")
+                        (last)
+                        (.split "name")
+                        (second)))
         (.split a "\"")
         (nth a 2)
         (str a)
@@ -60,7 +65,8 @@
         (client/get (str "http://elegant-croissant.glitch.me/spotify?type=track&q=" a) {:accept :json})
         (str a)
         (.split a "spotify:track:")
-        (str (muuta (second a) 1) " - " (muuta (first a) 0))))
+        (first a)
+        (str (muuta a 1) " - " (muuta a 0))))
 
 (defn videoname [query source]
   (cond (= source 0) (videonametube (videoid query 0))
