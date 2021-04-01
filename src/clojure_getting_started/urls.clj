@@ -40,17 +40,31 @@
         (str t)
         (subs t 0 (- (.length t) 1))))
 
+(defn muuta [m c]
+    (as-> m a
+        (.split a "name")
+        (cond (= c 0) (last a)
+              (= c 1) (second a))
+        (.split a "\"")
+        (nth a 2)
+        (str a)
+        (subs a 0 (- (.length a) 1))))
 
 (defn videonametube [query]
   (let [teksti (str (client/get (str "https://www.youtube.com/watch?v=" query)))
         t (second (.split teksti "title>"))]
     (clojure.string/join "-" (reverse  (rest  (reverse (.split (subs t 0 (- (.length t) 2)) "-")))))))
 
-(defn videonamespot [])
+(defn videonamespot [q]
+  (as-> q a
+        (client/get (str "http://elegant-croissant.glitch.me/spotify?type=track&q=" a) {:accept :json})
+        (str a)
+        (.split a "spotify:track:")
+        (str (muuta (second a) 1) " - " (muuta (first a) 0))))
 
 (defn videoname [query source]
   (cond (= source 0) (videonametube (videoid query 0))
-        (= source 1) query))
+        (= source 1) (videonamespot query)))
 
 (defn get-url-by-id [id table]
             (let [query [(str "SELECT url FROM " table " WHERE id = ?") id]

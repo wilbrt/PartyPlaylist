@@ -1,0 +1,135 @@
+REPL Instructions
+
+Code can be entered at the bottom and executed by pressing shift+enter.
+
+Try it now by typing (+ 1 1) in the bottom section and pressing shift+enter.
+
+Working in another Clojure file and sending forms to the REPL is the most efficient way to work. Use the following key bindings to send code to the REPL. See the settings for more keybindings.
+
+ctrl-alt-, then b
+Execute block. Finds the block of Clojure code your cursor is in and executes that.
+
+ctrl-alt-, s
+Executes the selection. Sends the selected text to the REPL.
+
+You can disable this help text in the settings.
+Starting remote REPL connection on localhost:53387
+Starting remote REPL connection on localhost:55154
+Refreshing code...
+No user namespace defined. Defaulting to clojure.tools.namespace.repl/refresh.
+
+:reloading (clojure_getting_started.urls clojure-getting-started.web clojure-getting-started.web-test)
+Refresh complete
+(in-ns 'clojure_getting_started.urls)
+clojure_getting_started.urls=>
+#object[clojure.lang.Namespace 0x5f0f56cd "clojure_getting_started.urls"]
+(videoname "poison" 1)
+clojure_getting_started.urls=>
+" : \\\\n    }, {\\n      \\"
+(as-> q a
+      (client/get (str "http://elegant-croissant.glitch.me/spotify?type=track&q=" a) {:accept :json})
+      (str a)
+      (.split a "spotify:track:")
+      (str (first)))
+Syntax error compiling at (form-init16033858897648744784.clj:1:5).
+Unable to resolve symbol: q in this context
+(as-> "poison" a
+      (client/get (str "http://elegant-croissant.glitch.me/spotify?type=track&q=" a) {:accept :json})
+      (str a)
+      (.split a "spotify:track:")
+      (str (first)))
+Execution error (ArityException) at clojure-getting-started.urls/eval12124 (form-init16033858897648744784.clj:5).
+Wrong number of args (0) passed to: clojure.core/first--5369
+(as-> "poison" a
+      (client/get (str "http://elegant-croissant.glitch.me/spotify?type=track&q=" a) {:accept :json})
+      (str a)
+      (.split a "spotify:track:")
+      (str (first a)))
+clojure_getting_started.urls=>
+"{:cached nil, :request-time 515, :repeatable? false, :protocol-version {:name \"HTTP\", :major 1, :minor 1}, :streaming? true, :http-client #object[org.apache.http.impl.client.InternalHttpClient 0x462eabab \"org.apache.http.impl.client.InternalHttpClient@462eabab\"], :chunked? true, :reason-phrase \"OK\", :headers {\"Date\" \"Thu, 01 Apr 2021 13:29:08 GMT\", \"Content-Type\" \"application/json; charset=utf-8\", \"Transfer-Encoding\" \"chunked\", \"Connection\" \"close\", \"x-powered-by\" \"Express\", \"access-control-allow-origin\" \"*\"}, :orig-content-encoding nil, :status 200, :length -1, :body \"{\\n  \\\"tracks\\\" : {\\n    \\\"href\\\" : \\\"https://api.spotify.com/v1/search?query=poison&type=track&offset=0&limit=20\\\",\\n    \\\"items\\\" : [ {\\n      \\\"album\\\" : {\\n        \\\"album_type\\\" : \\\"single\\\",\\n        \\\"artists\\\" : [ {\\n          \\\"external_urls\\\" : {\\n            \\\"spotify\\\" : \\\"https://open.spotify.com/artist/3tlXnStJ1fFhdScmQeLpuG\\\"\\n          },\\n          \\\"href\\\" : \\\"https://api.spotify.com/v1/artists/3tlXnStJ1fFhdScmQeLpuG\\\",\\n          \\\"id\\\" : \\\"3tlXnStJ1fFhdScmQeLpuG\\\",\\n          \\\"name\\\" : \\\"Brent Faiyaz\\\",\\n          \\\"type\\\" : \\\"artist\\\",\\n          \\\"uri\\\" : \\\"spotify:artist:3tlXnStJ1fFhdScmQeLpuG\\\"\\n        } ],\\n        \\\"available_markets\\\" : [ \\\"AD\\\", \\\"AE\\\", \\\"AG\\\", \\\"AM\\\", \\\"AO\\\", \\\"AR\\\", \\\"AT\\\", \\\"AU\\\", \\\"AZ\\\", \\\"BB\\\", \\\"BD\\\", \\\"BE\\\", \\\"BF\\\", \\\"BG\\\", \\\"BH\\\", \\\"BI\\\", \\\"BJ\\\", \\\"BN\\\", \\\"BO\\\", \\\"BR\\\", \\\"BS\\\", \\\"BT\\\", \\\"BW\\\", \\\"BZ\\\", \\\"CA\\\", \\\"CH\\\", \\\"CL\\\", \\\"CM\\\", \\\"CO\\\", \\\"CR\\\", \\\"CV\\\", \\\"CW\\\", \\\"CY\\\", \\\"CZ\\\", \\\"DE\\\", \\\"DJ\\\", \\\"DK\\\", \\\"DM\\\", \\\"DO\\\", \\\"DZ\\\", \\\"EC\\\", \\\"EE\\\", \\\"EG\\\", \\\"ES\\\", \\\"FI\\\", \\\"FJ\\\", \\\"FM\\\", \\\"FR\\\", \\\"GA\\\", \\\"GB\\\", \\\"GD\\\", \\\"GE\\\", \\\"GH\\\", \\\"GM\\\", \\\"GN\\\", \\\"GQ\\\", \\\"GR\\\", \\\"GT\\\", \\\"GW\\\", \\\"GY\\\", \\\"HK\\\", \\\"HN\\\", \\\"HT\\\", \\\"HU\\\", \\\"ID\\\", \\\"IE\\\", \\\"IL\\\", \\\"IN\\\", \\\"IS\\\", \\\"IT\\\", \\\"JM\\\", \\\"JO\\\", \\\"JP\\\", \\\"KE\\\", \\\"KG\\\", \\\"KH\\\", \\\"KI\\\", \\\"KM\\\", \\\"KN\\\", \\\"KR\\\", \\\"KW\\\", \\\"KZ\\\", \\\"LA\\\", \\\"LB\\\", \\\"LC\\\", \\\"LI\\\", \\\"LK\\\", \\\"LS\\\", \\\"LT\\\", \\\"LU\\\", \\\"LV\\\", \\\"MA\\\", \\\"MC\\\", \\\"MD\\\", \\\"MG\\\", \\\"MH\\\", \\\"ML\\\", \\\"MN\\\", \\\"MO\\\", \\\"MR\\\", \\\"MT\\\", \\\"MU\\\", \\\"MV\\\", \\\"MW\\\", \\\"MX\\\", \\\"MY\\\", \\\"MZ\\\", \\\"NA\\\", \\\"NE\\\", \\\"NG\\\", \\\"NI\\\", \\\"NL\\\", \\\"NO\\\", \\\"NP\\\", \\\"NR\\\", \\\"NZ\\\", \\\"OM\\\", \\\"PA\\\", \\\"PE\\\", \\\"PG\\\", \\\"PH\\\", \\\"PK\\\", \\\"PL\\\", \\\"PS\\\", \\\"PT\\\", \\\"PW\\\", \\\"PY\\\", \\\"QA\\\", \\\"RO\\\", \\\"RU\\\", \\\"RW\\\", \\\"SA\\\", \\\"SB\\\", \\\"SC\\\", \\\"SE\\\", \\\"SG\\\", \\\"SI\\\", \\\"SK\\\", \\\"SL\\\", \\\"SM\\\", \\\"SN\\\", \\\"SR\\\", \\\"ST\\\", \\\"SV\\\", \\\"SZ\\\", \\\"TD\\\", \\\"TG\\\", \\\"TH\\\", \\\"TL\\\", \\\"TN\\\", \\\"TO\\\", \\\"TR\\\", \\\"TT\\\", \\\"TV\\\", \\\"TW\\\", \\\"TZ\\\", \\\"UA\\\", \\\"UG\\\", \\\"US\\\", \\\"UY\\\", \\\"UZ\\\", \\\"VC\\\", \\\"VN\\\", \\\"VU\\\", \\\"WS\\\", \\\"ZA\\\", \\\"ZM\\\" ],\\n        \\\"external_urls\\\" : {\\n          \\\"spotify\\\" : \\\"https://open.spotify.com/album/17dsllSewkPuKbkGWU4chD\\\"\\n        },\\n        \\\"href\\\" : \\\"https://api.spotify.com/v1/albums/17dsllSewkPuKbkGWU4chD\\\",\\n        \\\"id\\\" : \\\"17dsllSewkPuKbkGWU4chD\\\",\\n        \\\"images\\\" : [ {\\n          \\\"height\\\" : 640,\\n          \\\"url\\\" : \\\"https://i.scdn.co/image/ab67616d0000b2731a0d446b811ad07512eb19df\\\",\\n          \\\"width\\\" : 640\\n        }, {\\n          \\\"height\\\" : 300,\\n          \\\"url\\\" : \\\"https://i.scdn.co/image/ab67616d00001e021a0d446b811ad07512eb19df\\\",\\n          \\\"width\\\" : 300\\n        }, {\\n          \\\"height\\\" : 64,\\n          \\\"url\\\" : \\\"https://i.scdn.co/image/ab67616d000048511a0d446b811ad07512eb19df\\\",\\n          \\\"width\\\" : 64\\n        } ],\\n        \\\"name\\\" : \\\"Poison\\\",\\n        \\\"release_date\\\" : \\\"2016-08-03\\\",\\n        \\\"release_date_precision\\\" : \\\"day\\\",\\n        \\\"total_tracks\\\" : 1,\\n        \\\"type\\\" : \\\"album\\\",\\n        \\\"uri\\\" : \\\"spotify:album:17dsllSewkPuKbkGWU4chD\\\"\\n      },\\n      \\\"artists\\\" : [ {\\n        \\\"external_urls\\\" : {\\n          \\\"spotify\\\" : \\\"https://open.spotify.com/artist/3tlXnStJ1fFhdScmQeLpuG\\\"\\n        },\\n        \\\"href\\\" : \\\"https://api.spotify.com/v1/artists/3tlXnStJ1fFhdScmQeLpuG\\\",\\n        \\\"id\\\" : \\\"3tlXnStJ1fFhdScmQeLpuG\\\",\\n        \\\"name\\\" : \\\"Brent Faiyaz\\\",\\n        \\\"type\\\" : \\\"artist\\\",\\n        \\\"uri\\\" : \\\"spotify:artist:3tlXnStJ1fFhdScmQeLpuG\\\"\\n      } ],\\n      \\\"available_markets\\\" : [ \\\"AD\\\", \\\"AE\\\", \\\"AG\\\", \\\"AM\\\", \\\"AO\\\", \\\"AR\\\", \\\"AT\\\", \\\"AU\\\", \\\"AZ\\\", \\\"BB\\\", \\\"BD\\\", \\\"BE\\\", \\\"BF\\\", \\\"BG\\\", \\\"BH\\\", \\\"BI\\\", \\\"BJ\\\", \\\"BN\\\", \\\"BO\\\", \\\"BR\\\", \\\"BS\\\", \\\"BT\\\", \\\"BW\\\", \\\"BZ\\\", \\\"CA\\\", \\\"CH\\\", \\\"CL\\\", \\\"CM\\\", \\\"CO\\\", \\\"CR\\\", \\\"CV\\\", \\\"CW\\\", \\\"CY\\\", \\\"CZ\\\", \\\"DE\\\", \\\"DJ\\\", \\\"DK\\\", \\\"DM\\\", \\\"DO\\\", \\\"DZ\\\", \\\"EC\\\", \\\"EE\\\", \\\"EG\\\", \\\"ES\\\", \\\"FI\\\", \\\"FJ\\\", \\\"FM\\\", \\\"FR\\\", \\\"GA\\\", \\\"GB\\\", \\\"GD\\\", \\\"GE\\\", \\\"GH\\\", \\\"GM\\\", \\\"GN\\\", \\\"GQ\\\", \\\"GR\\\", \\\"GT\\\", \\\"GW\\\", \\\"GY\\\", \\\"HK\\\", \\\"HN\\\", \\\"HT\\\", \\\"HU\\\", \\\"ID\\\", \\\"IE\\\", \\\"IL\\\", \\\"IN\\\", \\\"IS\\\", \\\"IT\\\", \\\"JM\\\", \\\"JO\\\", \\\"JP\\\", \\\"KE\\\", \\\"KG\\\", \\\"KH\\\", \\\"KI\\\", \\\"KM\\\", \\\"KN\\\", \\\"KR\\\", \\\"KW\\\", \\\"KZ\\\", \\\"LA\\\", \\\"LB\\\", \\\"LC\\\", \\\"LI\\\", \\\"LK\\\", \\\"LS\\\", \\\"LT\\\", \\\"LU\\\", \\\"LV\\\", \\\"MA\\\", \\\"MC\\\", \\\"MD\\\", \\\"MG\\\", \\\"MH\\\", \\\"ML\\\", \\\"MN\\\", \\\"MO\\\", \\\"MR\\\", \\\"MT\\\", \\\"MU\\\", \\\"MV\\\", \\\"MW\\\", \\\"MX\\\", \\\"MY\\\", \\\"MZ\\\", \\\"NA\\\", \\\"NE\\\", \\\"NG\\\", \\\"NI\\\", \\\"NL\\\", \\\"NO\\\", \\\"NP\\\", \\\"NR\\\", \\\"NZ\\\", \\\"OM\\\", \\\"PA\\\", \\\"PE\\\", \\\"PG\\\", \\\"PH\\\", \\\"PK\\\", \\\"PL\\\", \\\"PS\\\", \\\"PT\\\", \\\"PW\\\", \\\"PY\\\", \\\"QA\\\", \\\"RO\\\", \\\"RU\\\", \\\"RW\\\", \\\"SA\\\", \\\"SB\\\", \\\"SC\\\", \\\"SE\\\", \\\"SG\\\", \\\"SI\\\", \\\"SK\\\", \\\"SL\\\", \\\"SM\\\", \\\"SN\\\", \\\"SR\\\", \\\"ST\\\", \\\"SV\\\", \\\"SZ\\\", \\\"TD\\\", \\\"TG\\\", \\\"TH\\\", \\\"TL\\\", \\\"TN\\\", \\\"TO\\\", \\\"TR\\\", \\\"TT\\\", \\\"TV\\\", \\\"TW\\\", \\\"TZ\\\", \\\"UA\\\", \\\"UG\\\", \\\"US\\\", \\\"UY\\\", \\\"UZ\\\", \\\"VC\\\", \\\"VN\\\", \\\"VU\\\", \\\"WS\\\", \\\"ZA\\\", \\\"ZM\\\" ],\\n      \\\"disc_number\\\" : 1,\\n      \\\"duration_ms\\\" : 212992,\\n      \\\"explicit\\\" : false,\\n      \\\"external_ids\\\" : {\\n        \\\"isrc\\\" : \\\"TCACQ1663630\\\"\\n      },\\n      \\\"external_urls\\\" : {\\n        \\\"spotify\\\" : \\\"https://open.spotify.com/track/5NijSs5dAwaIybq1GaRTIe\\\"\\n      },\\n      \\\"href\\\" : \\\"https://api.spotify.com/v1/tracks/5NijSs5dAwaIybq1GaRTIe\\\",\\n      \\\"id\\\" : \\\"5NijSs5dAwaIybq1GaRTIe\\\",\\n      \\\"is_local\\\" : false,\\n      \\\"name\\\" : \\\"Poison\\\",\\n      \\\"popularity\\\" : 72,\\n      \\\"preview_url\\\" : \\\"https://p.scdn.co/mp3-preview/377558b6d9ac9c5c3c1bde6ae656d2998c2e224a?cid=3a0fbbf282a34b098a225c2c5d35c21a\\\",\\n      \\\"track_number\\\" : 1,\\n      \\\"type\\\" : \\\"track\\\",\\n      \\\"uri\\\" : \\\""
+(as-> "poison" a
+      (client/get (str "http://elegant-croissant.glitch.me/spotify?type=track&q=" a) {:accept :json})
+      (str a)
+      (.split a "spotify:track:")
+      (str (first a))
+      (.split a "\""))      
+clojure_getting_started.urls=>
+#object["[Ljava.lang.String;" 0x40c39d7f "[Ljava.lang.String;@40c39d7f"]
+(as-> "poison" a
+      (client/get (str "http://elegant-croissant.glitch.me/spotify?type=track&q=" a) {:accept :json})
+      (str a)
+      (.split a "spotify:track:")
+      (str (first a))
+      (.split a "name")
+      (last a))            
+clojure_getting_started.urls=>
+"\\\" : \\\"Poison\\\",\\n      \\\"popularity\\\" : 72,\\n      \\\"preview_url\\\" : \\\"https://p.scdn.co/mp3-preview/377558b6d9ac9c5c3c1bde6ae656d2998c2e224a?cid=3a0fbbf282a34b098a225c2c5d35c21a\\\",\\n      \\\"track_number\\\" : 1,\\n      \\\"type\\\" : \\\"track\\\",\\n      \\\"uri\\\" : \\\""
+(as-> "poison" a
+      (client/get (str "http://elegant-croissant.glitch.me/spotify?type=track&q=" a) {:accept :json})
+      (str a)
+      (.split a "spotify:track:")
+      (str (first a))
+      (.split a "name")
+      (last a)
+      (.split a "\"")
+      (second a))                   
+clojure_getting_started.urls=>
+" : \\"
+(as-> "poison" a
+      (client/get (str "http://elegant-croissant.glitch.me/spotify?type=track&q=" a) {:accept :json})
+      (str a)
+      (.split a "spotify:track:")
+      (str (first a))
+      (.split a "name")
+      (last a)
+      (.split a "\"")
+      (nth a 3))                   
+clojure_getting_started.urls=>
+",\\n      \\"
+(as-> "poison" a
+      (client/get (str "http://elegant-croissant.glitch.me/spotify?type=track&q=" a) {:accept :json})
+      (str a)
+      (.split a "spotify:track:")
+      (str (first a))
+      (.split a "name")
+      (last a)
+      (.split a "\"")
+      (first a))                   
+clojure_getting_started.urls=>
+"\\"
+(as-> "poison" a
+      (client/get (str "http://elegant-croissant.glitch.me/spotify?type=track&q=" a) {:accept :json})
+      (str a)
+      (.split a "spotify:track:")
+      (str (first a))
+      (.split a "name")
+      (last a)
+      (.split a "\"")
+      (nth a 2))                   
+clojure_getting_started.urls=>
+"Poison\\"
+(as-> "poison" a
+      (client/get (str "http://elegant-croissant.glitch.me/spotify?type=track&q=" a) {:accept :json})
+      (str a)
+      (.split a "spotify:track:")
+      (str (first a))
+      (.split a "name")
+      (last a)
+      (.split a "\"")
+      (nth a 2)
+      (str t)
+      (subs t 0 (- (.length t) 1)))                         
+Syntax error compiling at (form-init16033858897648744784.clj:10:7).
+Unable to resolve symbol: t in this context
+--------------------
+(as-> "poison" a
+      (client/get (str "http://elegant-croissant.glitch.me/spotify?type=track&q=" a) {:accept :json})
+      (str a)
+      (.split a "spotify:track:")
+      (str (first a))
+      (.split a "name")
+      (last a)
+      (.split a "\"")
+      (nth a 2)
+      (str a)
+      (subs a 0 (- (.length a) 1)))                         
