@@ -21,24 +21,43 @@
         [:p "Your room is being prepared."]))
 
 (defn videoid [query source]
-  (as-> query t
-        (str t)
-        (cond (= source 0) (as->  t a
+  (if (= source 2)
+               (as-> (str query) a
+                     (client/get (str "https://soundcloud.com/search/sounds?q=" a) {:accept :json})
+                     (str a)
+                     (.split a "<h2><a href=\\\\\"")
+                     (second a)
+                     (.split a "\"")
+                     (first a)
+                     (str a)
+                     (subs a 0 (- (.length a) 1))
+                     (client/get (str "https://soundcloud.com" a))
+                     (str a)
+                     (.split a "soundcloud:tracks:")
+                     (second a)
+                     (.split a "\"")
+                     (first a)
+                     (str a)
+                     (subs a 0 (- (.length a) 1)))
+
+               (as-> query t
+                     (str t)
+                     (cond (= source 0) (as->  t a
                                   (client/get "https://www.youtube.com/results" {:query-params {"search_query" a}})
                                   (str a)
                                   (.split a "videoId"))
-              (= source 1) (as-> t a
+                           (= source 1) (as-> t a
                                  (client/get (str "http://elegant-croissant.glitch.me/spotify?type=track&q=" a) {:accept :json})
                                  (str a)
                                  (.split a "spotify:track:")))
-        (second t )
-        (.split t "\"")
-        (cond (= source 0) (->  t
-                                  (nth 2))
-              (= source 1) (->  t
-                                  (first)))
-        (str t)
-        (subs t 0 (- (.length t) 1))))
+                     (second t )
+                     (.split t "\"")
+                     (cond (= source 0)      (->  t
+                                                  (nth 2))
+                           (= source 1)      (->  t
+                                                  (first)))
+                     (str t)
+                     (subs t 0 (- (.length t) 1)))))
 
 (defn muuta [m c]
     (as-> m a
@@ -68,9 +87,29 @@
         (first a)
         (str (muuta a 1) " - " (muuta a 0))))
 
+(defn videonamecloud [q]
+  (as-> q t
+        (client/get (str "https://soundcloud.com/search/sounds?q=" t) {:accept :json})
+        (str t)
+        (.split t "<h2><a href=\\\\\"")
+        (second t)
+        (.split t "\"")
+        (first t)
+        (str t)
+        (subs t 0 (- (.length t) 1))
+        (client/get (str "https://soundcloud.com" t))
+        (str t)
+        (.split t "Stream")
+        (second t)
+        (.split t "from")
+        (first t)
+        (.split t "by")
+        (str (last t) "-" (first t))))
+
 (defn videoname [query source]
   (cond (= source 0) (videonametube (videoid query 0))
-        (= source 1) (videonamespot query)))
+        (= source 1) (videonamespot query)
+        (= source 2) (videonamecloud query)))
 
 (defn get-url-by-id [id table]
             (let [query [(str "SELECT url FROM " table " WHERE id = ?") id]
@@ -115,23 +154,27 @@
       (jdbc/execute! spec [(str "update " table " set id = id - 1 where id < ?") 30]))
 
 (defn player [table id source]
-  #_(html [:iframe { :width "300" :height "380" :src "https://open.spotify.com/embed/track/5XcZRgJv3zMhTqCyESjQrF"
-  :frameboarder "0" :allow "encrypted-media;" :allowtransparency "true"}])
   (if (and id source) (cond
                               (= source 0) (html  [:script "$(function() {
                                                 $('#addtolist').ajaxForm(function() {
                                                   document.getElementById('lista').src = document.getElementById('lista').src;});});"]
                                    [:iframe { :width "560" :height "300" :src (str "https://www.youtube.com/embed/" id "?autoplay=1")
                                               :frameboarder "0" :allow "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"}])
-                (= source 1) (html [:script "$(function() {
+                              (= source 1) (html [:script "$(function() {
                                                 $('#addtolist').ajaxForm(function() {
                                                   document.getElementById('lista').src = document.getElementById('lista').src;});});"]
                                    [:iframe { :width "300" :height "380" :src (str "https://open.spotify.com/embed/track/" id)
-                                              :frameboarder "0" :allow "encrypted-media;" :allowtransparency "true"}]))
-         (html [:script "$(function() {
-              $('#addtolist').ajaxForm(function() {
-                        location.reload();});});"]
-               [:p "Playlist empty"])))
+                                              :frameboarder "0" :allow "encrypted-media;" :allowtransparency "true"}])
+                              (= source 2) (html [:script "$(function() {
+                                                $('#addtolist').ajaxForm(function() {
+                                                  document.getElementById('lista').src = document.getElementById('lista').src;});});"]
+                                   [:iframe {:width "100%" :height "166" :scrolling "no" :frameborder "no"
+                                             :allow "autoplay" :src (str "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/" id)}]))
+
+                      (html [:script "$(function() {
+                        $('#addtolist').ajaxForm(function() {
+                          location.reload();});});"]
+                          [:p "Playlist empty"])))
 
 (defn videohaku [req]
   (let [table (get-in req [:params :huone])
@@ -146,7 +189,8 @@
                       [:input {:type "text" :id "url" :name "url"}]
                       [:select {:id "source" :name "source" :form_id "addtolist"}
                           [:option {:value 0} "Youtube"]
-                          [:option {:value 1} "Spotify"]]
+                          [:option {:value 1} "Spotify"]
+                          [:option {:value 2} "SoundCloud"]]
                       [:input {:type "hidden" :id "huone" :name "huone" :value table}]
                       [:input {:type "submit" :id "url" :name "url"}]]
                 [:button {:type "submit" :value "Next" :onclick (str "window.location=\"./seuraava?huone=" table "\";")} "Next"]
