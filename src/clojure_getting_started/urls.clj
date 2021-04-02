@@ -22,7 +22,8 @@
 
 (defn videoid [query source]
   (if (= source 2)
-               (as-> (str query) a
+               (as-> query a
+                     (str a)
                      (client/get (str "https://soundcloud.com/search/sounds?q=" a) {:accept :json})
                      (str a)
                      (.split a "<h2><a href=\\\\\"")
@@ -142,10 +143,9 @@
 
 
 (defn create-url-handler [req]
-  (let [r (str (first (get-in req [:params :url])))
+  (let [r (get-in req [:params :url])
         table (get-in req [:params :huone])
         source (Integer/parseInt (get-in req [:params :source]))]
-    (str r table source)
     (-> (videoid r source)
               (create-url! (videoname r source) table source))))
 
