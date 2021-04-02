@@ -180,14 +180,21 @@
   (let [table (get-in req [:params :huone])
         url (get-url-by-id 1 table)
         sorsa (get-source-by-id 1 table)]
-      (html [:h [:script {:src "https://code.jquery.com/jquery-3.5.1.min.js" :integrity "sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" :crossorigin "anonymous"}]
+      (html [:h [:meta {:name "viewport" :content "width=device-width, initial-scale=1"}]
+                [:link {:href "http://fonts.googleapis.com/css?family=Corben:bold" :rel "stylesheet" :type "text/css"}]
+                [:link {:href "http://fonts.googleapis.com/css?family=Nobile" :rel "stylesheet" :type "text/css"}]
+                [:style {:type "text/css"} (str (if (clojure.string/includes? (str (get req :User-Agent)) "Mobile")
+                                                                      "#teksti { width: 50%; } #source { width: 30%;} #url { width: 20%; } #lista { width: 100%; }")
+                              "h1, h2, h3, h4, h5, h6 { font-family: 'Corben', Georgia, Times, serif; font-size: 1.5em; }
+                               p, div { font-family: 'Nobile', Helvetica, Arial, sans-serif; }")]
+                [:script {:src "https://code.jquery.com/jquery-3.5.1.min.js" :integrity "sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" :crossorigin "anonymous"}]
                 [:script {:src "https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js" :integrity "sha384-qlmct0AOBiA2VPZkMY3+2WqkHtIQ9lSdAsAn5RUJD/3vA5MKDgSGcdmIv4ycVxyn" :crossorigin "anonymous"}]]
-            [:div {:align "center"} [:p (str "ROOM NAME: " table)]]
+            [:div {:align "center"} [:h1 (str "Room Name: " (clojure.string/upper-case (str table)))]]
             [:div {:align "center"} (player table url sorsa)]
             [:div {:align "center"} [:p (get-name-by-id 1 table)]]
-            [:div {:align "center"}
+            [:div {:align "center" :id "search"}
                 [:form {:id "addtolist" :action "./asd" :onclick "setTimeout(() => {document.getElementById('lista').src = document.getElementById('lista').src;}, 2000);" :method "post"}
-                      [:input {:type "text" :id "url" :name "url"}]
+                      [:input {:type "text" :id "teksti" :name "teksti"}]
                       [:select {:id "source" :name "source" :form_id "addtolist"}
                           [:option {:value 0} "Youtube"]
                           [:option {:value 1} "Spotify"]
@@ -196,12 +203,19 @@
                       [:input {:type "submit" :id "url" :name "url"}]]
                 [:button {:type "submit" :value "Next" :onclick (str "window.location=\"./seuraava?huone=" table "\";")} "Next"]
                            #_[:button {:type "submit" :value "ref" :onclick "document.getElementById('lista').src = document.getElementById('lista').src"} "Refresh Playlist"]]
-            [:div {:align "center"}
+            [:div {:align "center" :style "margin-top: 10px;"}
                 [:iframe {:id "lista" :width "450" :height "315" :src (str "./soittolista?huone=" table)}]])))
 
 
 (defn frontpage [req]
-  (html [:div {:align "center"}
+  (html   [:h [:meta {:name "viewport" :content "width=device-width, initial-scale=1"}]
+              [:link {:href "http://fonts.googleapis.com/css?family=Corben:bold" :rel "stylesheet" :type "text/css"}]
+              [:link {:href "http://fonts.googleapis.com/css?family=Nobile" :rel "stylesheet" :type "text/css"}]
+              [:style {:type "text/css"}
+                "h1, h2, h3, h4, h5, h6 { font-family: 'Corben', Georgia, Times, serif; font-size: 1.5em; }
+                 p, div { font-family: 'Nobile', Helvetica, Arial, sans-serif; }"]]
+          [:div {:align "center"}
+          [:h1 "Welcome to Party Playlist!"]
           [:p "Type in a name to Create a new room or Join an existing one and pimp your party with a playlist!"]
           [:form {:id "nimi" :action "./luohuone"  :method "post"}
             [:input {:type "text" :id "nimi" :name "nimi"}]
