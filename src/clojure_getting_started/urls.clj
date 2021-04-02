@@ -184,7 +184,7 @@
                 [:link {:href "http://fonts.googleapis.com/css?family=Corben:bold" :rel "stylesheet" :type "text/css"}]
                 [:link {:href "http://fonts.googleapis.com/css?family=Nobile" :rel "stylesheet" :type "text/css"}]
                 [:style {:type "text/css"} (str (if (clojure.string/includes? (str (get req :User-Agent)) "Mobile")
-                                                                      "#url { width: 50%; } #source { width: 30%;} #but { width: 20%; } #lista { width: 90%; }")
+                                                                      "#url { width: 50%; } #source { width: 30%; } #but { width: 20%; } #lista { width: 100%; }")
                               "h1, h2, h3, h4, h5, h6 { font-family: 'Corben', Georgia, Times, serif; font-size: 1.5em; }
                                p, div { font-family: 'Nobile', Helvetica, Arial, sans-serif; }")]
                 [:script {:src "https://code.jquery.com/jquery-3.5.1.min.js" :integrity "sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" :crossorigin "anonymous"}]
@@ -195,7 +195,7 @@
             [:div {:align "center" :id "search"}
                 [:form {:id "addtolist" :action "./asd" :onclick "setTimeout(() => {document.getElementById('lista').src = document.getElementById('lista').src;}, 2000);" :method "post"}
                       [:input {:type "text" :id "url" :name "url"}]
-                      [:select {:id "source" :name "source" :form_id "addtolist"}
+                      [:select {:id "source" :name "source" :form_id "addtolist" :style "margin-left: 2px; margin-right: 2px;"}
                           [:option {:value 0} "Youtube"]
                           [:option {:value 1} "Spotify"]
                           [:option {:value 2} "SoundCloud"]]
@@ -204,7 +204,7 @@
                 [:button {:type "submit" :value "Next" :onclick (str "window.location=\"./seuraava?huone=" table "\";")} "Next"]
                            #_[:button {:type "submit" :value "ref" :onclick "document.getElementById('lista').src = document.getElementById('lista').src"} "Refresh Playlist"]]
             [:div {:align "center" :style "margin-top: 10px;"}
-                [:iframe {:id "lista" :width "450" :height "315" :src (str "./soittolista?huone=" table)}]])))
+                [:iframe {:id "lista" :height "315" :src (str "./soittolista?huone=" table)}]])))
 
 
 (defn frontpage [req]
