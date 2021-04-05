@@ -176,15 +176,18 @@
                           location.reload();});});"]
                           [:p "Playlist empty"])))
 
+(defn findua [headers]
+  (second (first (filter #(= "user-agent" (first %)) headers))))
+
 (defn videohaku [req]
   (let [table (get-in req [:params :huone])
         url (get-url-by-id 1 table)
         sorsa (get-source-by-id 1 table)
-        b (clojure.string/includes? (str (get req :User-Agent)) "Mobile")]
-      (html [:h [:meta {:name "viewport" :content "width=device-width, initial-scale=1"}]
+        b (clojure.string/includes? (findua (get req :headers)) "Mobile")]
+    (html [:h [:meta {:name "viewport" :content "width=device-width, initial-scale=1"}]
                 [:link {:href "http://fonts.googleapis.com/css?family=Corben:bold" :rel "stylesheet" :type "text/css"}]
                 [:link {:href "http://fonts.googleapis.com/css?family=Nobile" :rel "stylesheet" :type "text/css"}]
-                [:style {:type "text/css"} (str (if b "#url { width: 50%; } #source { width: 30%; } #but { width: 20%; } #lista { width: 100%; }")
+                [:style {:type "text/css"} (str (if b "#url { width: 50%; } #source { width: 25%; } #but { width: 20%; } #lista { width: 100%; }")
                               "h1, h2, h3, h4, h5, h6 { font-family: 'Corben', Georgia, Times, serif; font-size: 1.5em; }
                                p, div { font-family: 'Nobile', Helvetica, Arial, sans-serif; }
                                ")]
