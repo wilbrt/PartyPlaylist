@@ -1,4 +1,4 @@
-(ns clojure-getting-started.web
+(ns PartyPlaylist.web
   (:require [compojure.core :refer :all]
             [compojure.handler :refer [site]]
             [compojure.route :as route]
@@ -8,17 +8,19 @@
             [clojure.java.jdbc :as jdbc]
             [clj-http.client :as client]
             [ring.util.request :as rur]
-            [clojure_getting_started.urls :as urls])
+            [PartyPlaylist.urls :as urls]
+            [PartyPlaylist.database :as database]
+            [PartyPlaylist.search :as search])
         (:use [hiccup.core]))
 
 
 (defroutes app
   (GET "/" [] urls/frontpage)
-  (GET "/seuraava" [] urls/seuraava)
+  (GET "/seuraava" [] database/seuraava)
   (GET "/videot" [] urls/videohaku)
   (GET "/soittolista" [] urls/soittolista)
-  (POST "/luohuone" [] urls/luohuone)
-  (POST "/asd" [] urls/create-url-handler)
+  (POST "/luohuone" [] database/luohuone)
+  (POST "/asd" [] database/create-url-handler)
   (ANY "*" []
        (route/not-found (slurp (io/resource "404.html")))))
 
